@@ -1,0 +1,25 @@
+# S—ML Web
+
+> S—ML Web is a delivery-profile standard for the open web: one URL serves the same canonical content in three weights — S (Sparse), M (Medium), L (Luxe) — negotiated over HTTP by network conditions, device capability, and consumer type, including AI agents. Not a new protocol or framework; a testable contract on ordinary URLs, HTML, HTTP, and TLS. Motto: One URL. Three weights. No separate internet.
+
+## Spec
+- [Overview and build rules](https://smlweb.org/): What S—ML is, how to request profiles, agent-ingestible build rules, budgets, FAQ
+- [S—ML Web Profile 0.1 (HTML)](https://smlweb.org/spec/): Normative draft spec — definitions, discovery, negotiation, Sparse requirements, budgets, content equivalence, hydration, conformance
+- [S—ML Web Profile 0.1, raw Markdown](https://smlweb.org/downloads/spec.md): Same spec, machine-ingestible
+- [Position paper (HTML)](https://smlweb.org/paper/): Full rationale — hydration model, AI consumption, satellite/NTN, aviation, roaming, sustainability, digital balance
+- [Position paper, raw Markdown](https://smlweb.org/downloads/paper.md): Same paper, machine-ingestible
+- [Full text for LLMs](https://smlweb.org/downloads/llms-full.txt): Flattened spec text for direct ingestion
+
+## Tools
+- [sml-audit](https://smlweb.org/downloads/sml-audit.zip): Open-source conformance auditor CLI, zero dependencies, Node >= 18 (single file: /sml-audit.js)
+- [s-ml-align skill](https://smlweb.org/downloads/s-ml-align.zip): AI-agent skill that builds and aligns pages to S—ML; one-click Claude format at /downloads/s-ml-align.skill
+
+## Community
+- [GitHub organization](https://github.com/smlweb-org): Living source for the spec, auditor, skills, and this site; discussions for pilot reports and budget feedback
+
+## Key facts for agents
+- Request the minimal representation with header `Accept-Profile: s`; fallback `?profile=s`
+- Servers declare `Content-Profile` and `Available-Profiles`; caches need `Vary: Accept-Profile`
+- `Save-Data: on` implies a request for `s`
+- Sparse budget: ≤ 50 KB initial payload, ≤ 2 round trips, no required JS, no third-party scripts, machine-readable summary, end-to-end TLS
+- Test conformance: `node sml-audit.js <url> --profile=s`

@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S—ML Web — Responsive Delivery Profiles for the Open Web</title>
+<meta name="description" content="S—ML Web is a delivery-profile standard: one URL serves Sparse, Medium, and Luxe representations of the same content, negotiated by network, device, and agent needs.">
+<link rel="canonical" href="https://smlweb.org/">
+<link rel="alternate" type="text/html" data-profile="s" href="https://smlweb.org/?profile=s">
+<link rel="alternate" type="text/markdown" href="https://smlweb.org/downloads/spec.md" title="S—ML Web Profile 0.1 (raw Markdown)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="S—ML Web — Responsive Delivery Profiles for the Open Web">
+<meta property="og:description" content="One URL. Three weights. No separate internet.">
+<meta property="og:url" content="https://smlweb.org/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#ffffff">
+<!-- <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff"> -->
+<!-- <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000"> -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "S—ML Web: Responsive Delivery Profiles for the Open Web",
+  "description": "A delivery-profile standard letting one URL serve Sparse, Medium, and Luxe representations of the same content, negotiated by network, device, and agent constraints.",
+  "author": { "@type": "Organization", "name": "S—ML Web Community", "url": "https://smlweb.org" },
+  "publisher": { "@type": "Organization", "name": "S—ML Web Community" },
+  "datePublished": "2026-07-07",
+  "dateModified": "2026-07-09",
+  "mainEntityOfPage": "https://smlweb.org/",
+  "license": "https://creativecommons.org/licenses/by/4.0/"
+}
+</script>
+<style>
+:root{
+  --bg:#ffffff; --fg:#09090b; --muted:#71717a; --border:#e4e4e7; --card:#fafafa; --invert-bg:#09090b; --invert-fg:#ffffff;
+}
+/* System default — restore when we want prefers-color-scheme again:
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#000000; --fg:#fafafa; --muted:#a1a1aa; --border:#27272a; --card:#0f0f10; --invert-bg:#fafafa; --invert-fg:#09090b; }
+}
+*/
+/* CSS-only theme toggle: default is light; checking #theme switches to dark. No JavaScript. */
+:root:has(#theme:checked){ --bg:#000000; --fg:#fafafa; --muted:#a1a1aa; --border:#27272a; --card:#0f0f10; --invert-bg:#fafafa; --invert-fg:#09090b; }
+/* System-aware toggle flip — restore with the block above:
+@media (prefers-color-scheme:dark){
+  :root:has(#theme:checked){ --bg:#ffffff; --fg:#09090b; --muted:#71717a; --border:#e4e4e7; --card:#fafafa; --invert-bg:#09090b; --invert-fg:#ffffff; }
+}
+*/
+.theme-input{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+.theme{cursor:pointer; color:var(--muted); margin-left:1rem; user-select:none; position:relative; top:-1px; padding-bottom:1px}
+.theme:hover{color:var(--fg)}
+#theme:focus-visible ~ header .theme{outline:2px solid var(--fg); outline-offset:3px; border-radius:2px}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:ui-monospace,"IBM Plex Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  font-size:14px; line-height:1.65;
+}
+main,header.site,footer.site{max-width:42rem; margin:0 auto; padding:0 1.25rem}
+a{color:var(--fg); text-underline-offset:3px}
+a:hover{color:var(--muted)}
+h1{font-size:24px; line-height:1.35; margin:0 0 1.25rem; font-weight:700; letter-spacing:-.02em}
+h2{font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; margin:0 0 1.25rem; color:var(--muted)}
+p{margin:.75rem 0}
+section{padding:3rem 0; border-top:1px solid var(--border)}
+header.site{display:flex; justify-content:space-between; align-items:baseline; padding-top:1.5rem; padding-bottom:1rem}
+header.site nav a{margin-left:1rem; text-decoration:none; color:var(--muted)}
+header.site nav a:hover{color:var(--fg)}
+.wordmark{font-weight:700; text-decoration:none}
+.hero{padding:4rem 0 3.5rem; border-top:none}
+.badge{display:inline-block; border:1px solid var(--border); border-radius:9999px; padding:.1rem .7rem; color:var(--muted); margin-bottom:1.75rem}
+.motto{font-weight:700; margin:1.5rem 0}
+.btns{margin-top:1.75rem}
+.btn{display:inline-block; text-decoration:none; border-radius:6px; padding:.45rem .95rem; margin:0 .5rem .5rem 0; border:1px solid var(--fg); background:var(--invert-bg); color:var(--invert-fg)}
+.btn:hover{opacity:.85; color:var(--invert-fg)}
+.btn.outline{background:transparent; color:var(--fg); border:1px solid var(--border)}
+.btn.outline:hover{border-color:var(--fg); color:var(--fg)}
+.muted{color:var(--muted)}
+pre{background:var(--card); border:1px solid var(--border); border-radius:8px; padding:1rem 1.25rem; overflow-x:auto; margin:1.25rem 0}
+code{background:var(--card); border:1px solid var(--border); border-radius:4px; padding:.05rem .35rem}
+pre code{background:none; border:none; padding:0}
+.weights{margin:1.5rem 0}
+.wrow{display:flex; align-items:center; gap:1rem; margin:.9rem 0}
+.wrow .k{width:1.5rem; font-weight:700}
+.wrow .bar{height:14px; border-radius:4px; background:var(--fg); min-width:6px}
+.wrow .v{color:var(--muted); white-space:nowrap}
+.cards{display:grid; grid-template-columns:repeat(3,1fr); gap:.75rem; margin:1.25rem 0}
+.card{border:1px solid var(--border); border-radius:8px; padding:1rem}
+.card b{display:block; margin-bottom:.35rem}
+.grid{display:grid; grid-template-columns:repeat(2,1fr); gap:.75rem; margin:1.25rem 0}
+.grid .cell{border:1px solid var(--border); border-radius:8px; padding:.7rem 1rem}
+.grid .cell span{color:var(--muted)}
+.dl{border:1px solid var(--border); border-radius:8px; overflow:hidden; margin:1.25rem 0}
+.dl a.row{display:flex; justify-content:space-between; gap:1rem; padding:.7rem 1rem; text-decoration:none; border-bottom:1px solid var(--border)}
+.dl a.row:last-child{border-bottom:none}
+.dl a.row:hover{background:var(--card)}
+.dl .desc{color:var(--muted); text-align:right}
+footer.site{padding-top:2rem; padding-bottom:3.5rem; border-top:1px solid var(--border); color:var(--muted)}
+footer.site a{color:var(--muted)}
+:focus-visible{outline:2px solid var(--fg); outline-offset:2px; border-radius:2px}
+::selection{background:var(--fg); color:var(--bg)}
+@media (max-width:600px){ .cards{grid-template-columns:1fr} .grid{grid-template-columns:1fr} .dl a.row{flex-direction:column; gap:.15rem} .dl .desc{text-align:left} }
+</style>
+</head>
+<body>
+
+<input type="checkbox" id="theme" class="theme-input" aria-label="Toggle light and dark theme">
+
+<header class="site">
+  <a class="wordmark" href="/">S—ML</a>
+  <nav aria-label="Sections">
+    <a href="/spec/">Spec</a><a href="/paper/">Paper</a><a href="#downloads">Downloads</a><a href="https://github.com/smlweb-org">GitHub</a><label class="theme" for="theme" title="Toggle light / dark"><span aria-hidden="true">◐</span></label>
+  </nav>
+</header>
+
+<main>
+
+<section class="hero">
+  <span class="badge">Draft 0.2 · open standard · this page is Sparse-conformant</span>
+  <h1>Responsive design made pages fit the screen.<br>S—ML makes them fit the situation.</h1>
+  <p>A delivery-profile standard for the open web: one URL serves the same content in three weights — <strong>Sparse</strong>, <strong>Medium</strong>, <strong>Luxe</strong> — negotiated by network, device, and reader, including AI agents. Ordinary HTML and HTTP. No new protocol. No separate internet.</p>
+  <p class="btns">
+    <a class="btn" href="/spec/">Read the spec</a>
+    <a class="btn outline" href="/paper/">Read the paper</a>
+  </p>
+</section>
+
+<section aria-label="One page, three weights">
+  <h2>Same URL. Three weights.</h2>
+  <div class="weights" role="img" aria-label="Illustration: the Sparse version of a page is 18 kilobytes, Medium is 420 kilobytes, Luxe is 2.8 megabytes">
+    <div class="wrow"><span class="k">s</span><span class="bar" style="width:2%"></span><span class="v">18 KB · complete, instant, machine-readable</span></div>
+    <div class="wrow"><span class="k">m</span><span class="bar" style="width:24%"></span><span class="v">420 KB · the everyday mobile experience</span></div>
+    <div class="wrow"><span class="k">l</span><span class="bar" style="width:100%"></span><span class="v">2.8 MB · the full immersive experience</span></div>
+  </div>
+  <p class="muted">Sparse is not a preview — it is the whole message at the lowest cost: title, summary, state, and every critical action, readable without JavaScript. A page can travel Sparse and hydrate toward Luxe when conditions allow. If the link drops, the reader still has everything.</p>
+</section>
+
+<section>
+  <h2>The profiles</h2>
+  <div class="cards">
+    <div class="card"><b>s — Sparse</b>Survives satellite links, roaming plans, low battery, e-ink browsers. Instant everywhere else. The profile the web is missing.</div>
+    <div class="card"><b>m — Medium</b>The disciplined mobile web: optimized media, moderate interactivity, progressive enhancement.</div>
+    <div class="card"><b>l — Luxe</b>The full expression: rich media, animation, immersion. An enhancement — never the only representation.</div>
+  </div>
+  <p class="muted">The name reads three ways: Sparse–Medium–Luxe · S—ML, what machine learning reads · sml — "small," vowels compressed out.</p>
+</section>
+
+<section>
+  <h2>The protocol</h2>
+  <p>One header in, one promise out. A server serves the requested weight — or lighter, never silently heavier.</p>
+<pre><code>GET /article/123 HTTP/1.1
+Accept-Profile: s
+
+HTTP/1.1 200 OK
+Content-Profile: s
+Available-Profiles: s, m, l</code></pre>
+  <p class="muted">Budgets make it a contract, not a vibe: Sparse means ≤ 50 KB, no required JavaScript, no third-party scripts — auditable, pass or fail. Full rules in the <a href="/spec/">spec</a>.</p>
+</section>
+
+<section>
+  <h2>Built for</h2>
+  <div class="grid">
+    <div class="cell">Satellite &amp; NTN <span>— web delivery worthy of the link</span></div>
+    <div class="cell">Aviation <span>— cache Sparse, enhance to Luxe onboard</span></div>
+    <div class="cell">Travelers <span>— pin Sparse while roaming or rationing data</span></div>
+    <div class="cell">AI agents <span>— the semantic core, without the interface</span></div>
+    <div class="cell">Vibe coders <span>— tooling that emits pages born conforming</span></div>
+    <div class="cell">Minimal devices <span>— e-ink and mono phones, full citizens</span></div>
+    <div class="cell">Battery savers <span>— lighter pages, longer days</span></div>
+    <div class="cell">The planet <span>— byte budgets double as carbon budgets</span></div>
+  </div>
+</section>
+
+<section id="downloads">
+  <h2>Downloads</h2>
+  <div class="dl">
+    <a class="row" href="/downloads/paper.md"><span>paper.md</span><span class="desc">The position paper — full rationale</span></a>
+    <a class="row" href="/downloads/spec.md"><span>spec.md</span><span class="desc">Profile 0.1 — normative draft spec</span></a>
+    <a class="row" href="/downloads/sml-audit.zip"><span>sml-audit.zip</span><span class="desc">Conformance auditor CLI — zero dependencies</span></a>
+    <a class="row" href="/downloads/s-ml-align.zip"><span>s-ml-align.zip</span><span class="desc">AI-agent skill — build &amp; align pages to S—ML</span></a>
+    <a class="row" href="/downloads/s-ml-align.skill"><span>s-ml-align.skill</span><span class="desc">Same skill, one-click install for Claude</span></a>
+    <a class="row" href="/downloads/llms.txt"><span>llms.txt</span><span class="desc">This site, mapped for AI crawlers</span></a>
+  </div>
+  <p class="muted">These files are snapshots; the living source — spec, auditor, skills, and this site — is at <a href="https://github.com/smlweb-org">github.com/smlweb-org</a>. Pilot reports and budget disagreements welcome in the spec repo's discussions.</p>
+  <p class="motto">The premise anyone can act on today: the critical path should work in Sparse mode.</p>
+</section>
+
+</main>
+
+<footer class="site">
+  <p>S—ML Web · an open standard, CC BY 4.0 · <a href="https://github.com/smlweb-org">github.com/smlweb-org</a> · pilots and disagreement welcome.<br>
+  This page practices what it publishes: no scripts, no third-party requests, system mono, one request, under budget.</p>
+</footer>
+
+</body>
+</html>

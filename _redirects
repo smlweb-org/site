@@ -1,0 +1,8 @@
+# Legacy download paths → /downloads/ (Netlify / Cloudflare Pages)
+/llms.txt              /downloads/llms.txt              200
+/llms-full.txt         /downloads/llms-full.txt         301
+/spec.md               /downloads/spec.md               301
+/paper.md              /downloads/paper.md              301
+/sml-audit.zip         /downloads/sml-audit.zip         301
+/s-ml-align.zip        /downloads/s-ml-align.zip        301
+/s-ml-align.skill      /downloads/s-ml-align.skill      301

@@ -1,0 +1,6 @@
+# S—ML delivery-profile headers (Netlify / Cloudflare Pages format).
+# This site ships one representation: the Sparse profile.
+/*
+  Content-Profile: s
+  Available-Profiles: s
+  Vary: Accept-Profile

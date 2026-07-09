@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S—ML Web Profile 0.1 — Draft Specification</title>
+<meta name="description" content="Normative draft spec: profile identifiers, discovery, negotiation, Sparse requirements, budgets, content equivalence, hydration, conformance.">
+<link rel="canonical" href="https://smlweb.org/spec/">
+<link rel="alternate" type="text/markdown" href="/downloads/spec.md" title="Raw Markdown">
+<meta name="theme-color" content="#ffffff">
+<style>
+:root{
+  --bg:#ffffff; --fg:#09090b; --muted:#71717a; --border:#e4e4e7; --card:#fafafa; --invert-bg:#09090b; --invert-fg:#ffffff;
+}
+:root:has(#theme:checked){ --bg:#000000; --fg:#fafafa; --muted:#a1a1aa; --border:#27272a; --card:#0f0f10; --invert-bg:#fafafa; --invert-fg:#09090b; }
+.theme-input{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+.theme{cursor:pointer; color:var(--muted); margin-left:1rem; user-select:none; position:relative; top:-1px; padding-bottom:1px}
+.theme:hover{color:var(--fg)}
+#theme:focus-visible ~ header .theme{outline:2px solid var(--fg); outline-offset:3px; border-radius:2px}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:ui-monospace,"IBM Plex Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  font-size:14px; line-height:1.65;
+}
+main,header.site,footer.site{max-width:42rem; margin:0 auto; padding:0 1.25rem}
+a{color:var(--fg); text-underline-offset:3px}
+a:hover{color:var(--muted)}
+header.site{display:flex; justify-content:space-between; align-items:baseline; padding-top:1.5rem; padding-bottom:1rem}
+header.site nav a{margin-left:1rem; text-decoration:none; color:var(--muted)}
+header.site nav a:hover,header.site nav a.active{color:var(--fg)}
+.wordmark{font-weight:700; text-decoration:none}
+.muted{color:var(--muted)}
+pre{background:var(--card); border:1px solid var(--border); border-radius:8px; padding:1rem 1.25rem; overflow-x:auto; margin:1.25rem 0}
+code{background:var(--card); border:1px solid var(--border); border-radius:4px; padding:.05rem .35rem}
+pre code{background:none; border:none; padding:0}
+.prose{padding:2rem 0 3.5rem}
+.prose h1{font-size:24px; line-height:1.35; margin:0 0 1.25rem; font-weight:700; letter-spacing:-.02em; color:var(--fg); text-transform:none}
+.prose h2{font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; margin:2.5rem 0 1rem; color:var(--muted)}
+.prose h3{font-size:14px; font-weight:700; margin:1.75rem 0 .75rem; color:var(--fg); text-transform:none; letter-spacing:0}
+.prose p{margin:.75rem 0}
+.prose em{color:var(--muted)}
+.prose hr{border:none; border-top:1px solid var(--border); margin:2rem 0}
+.prose ul,.prose ol{margin:.75rem 0; padding-left:1.5rem}
+.prose li{margin:.35rem 0}
+.prose blockquote{margin:1.25rem 0; padding:.75rem 1rem; border-left:3px solid var(--border); color:var(--muted)}
+.prose blockquote p{margin:0}
+.prose table{width:100%; border-collapse:collapse; margin:1.25rem 0; font-size:13px}
+.prose th,.prose td{border:1px solid var(--border); padding:.45rem .6rem; text-align:left; vertical-align:top}
+.prose th{background:var(--card); font-weight:700}
+footer.site{padding-top:2rem; padding-bottom:3.5rem; border-top:1px solid var(--border); color:var(--muted)}
+footer.site a{color:var(--muted)}
+:focus-visible{outline:2px solid var(--fg); outline-offset:2px; border-radius:2px}
+::selection{background:var(--fg); color:var(--bg)}
+@media (max-width:600px){ .prose table{font-size:12px} .prose th,.prose td{padding:.35rem .45rem} }
+</style>
+</head>
+<body>
+
+<input type="checkbox" id="theme" class="theme-input" aria-label="Toggle light and dark theme">
+
+<header class="site">
+  <a class="wordmark" href="/">S—ML</a>
+  <nav aria-label="Sections">
+    <a href="/spec/" class="active">Spec</a><a href="/paper/">Paper</a><a href="/downloads/spec.md">Raw .md</a><a href="https://github.com/smlweb-org">GitHub</a><label class="theme" for="theme" title="Toggle light / dark"><span aria-hidden="true">◐</span></label>
+  </nav>
+</header>
+
+<main class="prose">
+<h1>S—ML Web Profile 0.1 (Draft Specification)</h1>
+<p><em>Status: draft for community review. This is the normative specification, maintained independently of the S—ML position paper. Header names, thresholds, and syntax are provisional. The key words MUST, MUST NOT, SHOULD, and MAY are to be interpreted as described in RFC 2119.</em></p>
+<h2>A.1 Definitions</h2>
+<ul><li><strong>Resource</strong> — the canonical logical content at a URL: identity, title, summary, primary content or state, and critical actions.</li><li><strong>Representation</strong> — a concrete delivery of a resource in a given profile.</li><li><strong>Profile</strong> — a named delivery weight with declared budgets. This specification defines three profile identifiers: <code>s</code>, <code>m</code>, <code>l</code>.</li><li><strong>Critical actions</strong> — the operations a user must be able to perform from the resource (e.g., check in, mark safe, confirm).</li><li><strong>Hydration</strong> — client-side enhancement of a lighter representation toward a heavier profile after initial delivery.</li></ul>
+<h2>A.2 Discovery</h2>
+<p>A server offering S—ML profiles SHOULD advertise them on every representation:</p>
+<pre><code>Available-Profiles: s, m, l
+Content-Profile: m</code></pre>
+<p>An HTML representation SHOULD additionally declare alternates:</p>
+<pre><code class="lang-html">&lt;link rel=&quot;alternate&quot; type=&quot;text/html&quot; data-profile=&quot;s&quot; href=&quot;?profile=s&quot;&gt;</code></pre>
+<p>Servers MAY expose profiles via a <code>profile</code> query parameter as a fallback for clients that cannot set request headers. The canonical URL MUST be identical across profiles and declared via <code>rel=&quot;canonical&quot;</code>.</p>
+<h2>A.3 Negotiation</h2>
+<p>A client requests a profile with:</p>
+<pre><code>Accept-Profile: s</code></pre>
+<p>Rules:</p>
+<ol><li>A server that supports the requested profile MUST serve it and MUST declare it via <code>Content-Profile</code>.</li><li>A server that does not support the requested profile SHOULD serve the nearest <strong>lighter</strong> available profile, and MUST NOT silently serve a heavier one than requested.</li><li>A server serving profile-negotiated responses MUST include <code>Vary: Accept-Profile</code> so caches key correctly.</li><li>In the absence of <code>Accept-Profile</code>, a request carrying <code>Save-Data: on</code> SHOULD be treated as a request for <code>s</code>.</li><li>Negotiation MUST be driven by explicit client/user preference. Servers MUST NOT infer profiles from fingerprinting-adjacent signals (UA sniffing, IP-based network guessing) as the primary mechanism.</li></ol>
+<h2>A.4 The S representation (normative)</h2>
+<p>A representation served with <code>Content-Profile: s</code> MUST:</p>
+<ul><li>contain the resource&#x27;s canonical title, summary, primary content or current state, and critical actions in the initial response body;</li><li>be usable without executing client-side JavaScript (JavaScript MAY be present within budget as enhancement — tree-shaken and profile-gated — but core content and critical actions MUST NOT depend on it);</li><li>include no third-party scripts;</li><li>be served over TLS end to end, with no intermediary transcoding gateway;</li><li>include a machine-readable summary (meta description, JSON-LD, or equivalent structured block);</li><li>declare its canonical URL.</li></ul>
+<p>It SHOULD: avoid custom fonts; keep images optional or heavily compressed; be cacheable; complete core delivery within its round-trip budget.</p>
+<h2>A.5 Budgets (provisional)</h2>
+<table>
+<thead><tr><th>Requirement</th><th>s</th><th>m</th><th>l</th></tr></thead>
+<tbody>
+<tr><td>Initial payload (HTML + render-blocking subresources)</td><td>≤ 50 KB</td><td>≤ 500 KB</td><td>open</td></tr>
+<tr><td>Core content without JS</td><td>MUST</td><td>SHOULD</td><td>MAY</td></tr>
+<tr><td>Third-party scripts</td><td>MUST NOT</td><td>≤ 5 hosts</td><td>open</td></tr>
+<tr><td>Custom fonts</td><td>SHOULD NOT</td><td>MAY</td><td>MAY</td></tr>
+<tr><td>Round trips before core content</td><td>≤ 2</td><td>≤ 5</td><td>open</td></tr>
+<tr><td>Machine-readable summary</td><td>MUST</td><td>SHOULD</td><td>SHOULD</td></tr>
+<tr><td>End-to-end TLS</td><td>MUST</td><td>MUST</td><td>MUST</td></tr>
+</tbody>
+</table>
+<p>Budget classes (<code>S-14</code>, <code>S-50</code>, <code>S-100</code>, <code>M-500</code>, <code>M-1000</code>) MAY be declared where a single threshold is too coarse; a declared class is auditable like any budget. <code>S-50</code> is the default Sparse class.</p>
+<h2>A.6 Content equivalence</h2>
+<p>All profiles of a resource MUST agree on canonical title, summary, current state, and the set of critical actions. Heavier profiles MAY add content and capability; they MUST NOT contradict or omit the critical path present in <code>s</code>. A resource whose <code>s</code> representation cannot perform a critical action available in <code>l</code> is non-conforming.</p>
+<h2>A.7 Hydration (informative)</h2>
+<p>The <code>s</code> representation MAY serve as the wire format from which <code>m</code> and <code>l</code> are hydrated client-side. Where hydration is used: core content MUST be complete and usable before any hydration begins; hydration MUST be interruptible without loss of content or entered state; and a client that has requested <code>s</code> MUST NOT be forced to hydrate past it.</p>
+<h2>A.8 Conformance</h2>
+<p>A representation conforms to a profile if it meets every MUST and its budgets. Claims are made via <code>Content-Profile</code> and are auditable by tools (see <code>sml-audit</code>). Tools SHOULD report MUST violations as failures and SHOULD violations as warnings.</p>
+<h2>A.9 Security and privacy considerations</h2>
+<p>S—ML introduces no intermediary: representations are origin-served over end-to-end TLS, unlike historical gateway-based mobile architectures. Profile negotiation adds one low-entropy request header; implementations MUST NOT extend it with device-identifying detail, and user agents SHOULD let users pin a profile preference globally (e.g., &quot;always Sparse on metered links&quot;).</p>
+</main>
+
+<footer class="site">
+  <p class="muted">S—ML Web · CC BY 4.0 · <a href="/downloads/spec.md">Download raw Markdown</a> · <a href="https://github.com/smlweb-org">github.com/smlweb-org</a></p>
+</footer>
+
+</body>
+</html>

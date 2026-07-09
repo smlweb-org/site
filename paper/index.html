@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S—ML Web — Position Paper (Draft 0.2)</title>
+<meta name="description" content="Full rationale: hydration model, AI consumption, satellite/NTN, aviation, roaming, sustainability, digital balance.">
+<link rel="canonical" href="https://smlweb.org/paper/">
+<link rel="alternate" type="text/markdown" href="/downloads/paper.md" title="Raw Markdown">
+<meta name="theme-color" content="#ffffff">
+<style>
+:root{
+  --bg:#ffffff; --fg:#09090b; --muted:#71717a; --border:#e4e4e7; --card:#fafafa; --invert-bg:#09090b; --invert-fg:#ffffff;
+}
+:root:has(#theme:checked){ --bg:#000000; --fg:#fafafa; --muted:#a1a1aa; --border:#27272a; --card:#0f0f10; --invert-bg:#fafafa; --invert-fg:#09090b; }
+.theme-input{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+.theme{cursor:pointer; color:var(--muted); margin-left:1rem; user-select:none; position:relative; top:-1px; padding-bottom:1px}
+.theme:hover{color:var(--fg)}
+#theme:focus-visible ~ header .theme{outline:2px solid var(--fg); outline-offset:3px; border-radius:2px}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:ui-monospace,"IBM Plex Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  font-size:14px; line-height:1.65;
+}
+main,header.site,footer.site{max-width:42rem; margin:0 auto; padding:0 1.25rem}
+a{color:var(--fg); text-underline-offset:3px}
+a:hover{color:var(--muted)}
+header.site{display:flex; justify-content:space-between; align-items:baseline; padding-top:1.5rem; padding-bottom:1rem}
+header.site nav a{margin-left:1rem; text-decoration:none; color:var(--muted)}
+header.site nav a:hover,header.site nav a.active{color:var(--fg)}
+.wordmark{font-weight:700; text-decoration:none}
+.muted{color:var(--muted)}
+pre{background:var(--card); border:1px solid var(--border); border-radius:8px; padding:1rem 1.25rem; overflow-x:auto; margin:1.25rem 0}
+code{background:var(--card); border:1px solid var(--border); border-radius:4px; padding:.05rem .35rem}
+pre code{background:none; border:none; padding:0}
+.prose{padding:2rem 0 3.5rem}
+.prose h1{font-size:24px; line-height:1.35; margin:0 0 1.25rem; font-weight:700; letter-spacing:-.02em; color:var(--fg); text-transform:none}
+.prose h2{font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; margin:2.5rem 0 1rem; color:var(--muted)}
+.prose h3{font-size:14px; font-weight:700; margin:1.75rem 0 .75rem; color:var(--fg); text-transform:none; letter-spacing:0}
+.prose p{margin:.75rem 0}
+.prose em{color:var(--muted)}
+.prose hr{border:none; border-top:1px solid var(--border); margin:2rem 0}
+.prose ul,.prose ol{margin:.75rem 0; padding-left:1.5rem}
+.prose li{margin:.35rem 0}
+.prose blockquote{margin:1.25rem 0; padding:.75rem 1rem; border-left:3px solid var(--border); color:var(--muted)}
+.prose blockquote p{margin:0}
+.prose table{width:100%; border-collapse:collapse; margin:1.25rem 0; font-size:13px}
+.prose th,.prose td{border:1px solid var(--border); padding:.45rem .6rem; text-align:left; vertical-align:top}
+.prose th{background:var(--card); font-weight:700}
+footer.site{padding-top:2rem; padding-bottom:3.5rem; border-top:1px solid var(--border); color:var(--muted)}
+footer.site a{color:var(--muted)}
+:focus-visible{outline:2px solid var(--fg); outline-offset:2px; border-radius:2px}
+::selection{background:var(--fg); color:var(--bg)}
+@media (max-width:600px){ .prose table{font-size:12px} .prose th,.prose td{padding:.35rem .45rem} }
+</style>
+</head>
+<body>
+
+<input type="checkbox" id="theme" class="theme-input" aria-label="Toggle light and dark theme">
+
+<header class="site">
+  <a class="wordmark" href="/">S—ML</a>
+  <nav aria-label="Sections">
+    <a href="/spec/">Spec</a><a href="/paper/" class="active">Paper</a><a href="/downloads/paper.md">Raw .md</a><a href="https://github.com/smlweb-org">GitHub</a><label class="theme" for="theme" title="Toggle light / dark"><span aria-hidden="true">◐</span></label>
+  </nav>
+</header>
+
+<main class="prose">
+<h1>S—ML Web: Responsive Delivery Profiles for the Open Web</h1>
+<p><em>Draft 0.2 — July 2026</em></p>
+<hr>
+<h2>The Manifesto (TL;DR)</h2>
+<p>Responsive design made the web fit the screen. S—ML makes the web fit the situation.</p>
+<p>Today a single URL may be opened on a fast desktop connection, a phone on 5G, a handset connected through direct-to-device satellite, an aircraft seatback screen, an assistive reader, or by an AI agent that only needs the meaning of the page. These clients do not need the same weight of experience — yet the web has no common, testable way to request or publish a lighter one.</p>
+<p>S—ML Web proposes a delivery-profile layer for the web we already have. Every important resource can expose the same canonical content in three weights:</p>
+<ul><li><strong>S — Sparse.</strong> The minimal trustworthy representation: text-first, server-rendered, no required JavaScript, machine-readable, resilient on constrained or high-latency links.</li><li><strong>M — Medium.</strong> The disciplined everyday mobile experience.</li><li><strong>L — Luxe.</strong> The full rich experience: media, interactivity, immersion.</li></ul>
+<p>The profiles are contracts with budgets, negotiated over ordinary HTTP, auditable by ordinary tools. And they compose: a page can travel Sparse and <em>hydrate</em> toward Medium or Luxe on the client — low fidelity on the wire, high fidelity on the screen.</p>
+<p>One URL. Three weights. No separate internet.</p>
+<hr>
+<h2>Abstract</h2>
+<p>Responsive web design made the web adapt to screens. It did not make the web adapt to networks, cost, latency, urgency, battery, accessibility needs, or machine consumption. Modern pages are routinely delivered as large, script-heavy applications even when the consumer needs only a small amount of critical information — a flight gate, a storm warning, a balance, a confirmation.</p>
+<p>This paper proposes <strong>S—ML Web</strong>, a lightweight profile layer for the existing web. S—ML defines three delivery profiles — Sparse, Medium, and Luxe — for the same canonical resource, discoverable and negotiable over standard HTTP, with declared budgets that tooling can audit. It further proposes <strong>hydration across profiles</strong>: the Sparse representation acts as the durable wire format from which richer profiles can be reconstructed client-side when conditions allow.</p>
+<p>S—ML is not a new protocol, not a replacement for HTML, and not a parallel internet. It is a delivery contract: one resource, multiple weights, negotiated by context.</p>
+<hr>
+<h2>1. Introduction</h2>
+<p>The web is the universal publishing and application platform. A single URL can point to a news story, a bank transaction, a government form, a boarding pass, an emergency alert, or a medical instruction.</p>
+<p>Yet the representation delivered at that URL is usually optimized for abundance: fast networks, low latency, powerful devices, large batteries, modern browsers, cheap data, and continuous connectivity. These assumptions do not always hold. A user may be roaming, on a weak cell, connected via satellite, conserving battery, on an older device, relying on assistive technology, or reaching for information in an emergency. Increasingly, the consumer may not be a human at all, but an AI model, crawler, summarizer, agent, indexer, or archiver that needs the semantic core of a page far more than its visual shell.</p>
+<p>The web can technically serve all of these cases. What it lacks is a common <strong>delivery contract</strong> for them: a named, testable way for a client to ask for — and a publisher to promise — the right weight of experience.</p>
+<p>S—ML Web proposes that contract. This is not about creating a lesser web for constrained users. It is about making the web more reliable, more efficient, more machine-readable, and more context-aware for everyone.</p>
+<h2>2. The Problem</h2>
+<h3>2.1 Responsive design solved layout, not delivery</h3>
+<p>Responsive web design changed development by making pages adapt to screen size. Fluid grids, flexible media, and media queries let one page serve desktops, tablets, and phones. That solved a presentation problem.</p>
+<p>But a page can rearrange itself beautifully on a small screen while still requiring megabytes of JavaScript, multiple font files, third-party analytics, ad code, and long chains of client-side rendering before meaningful content appears.</p>
+<p>The layout is responsive. The payload is not.</p>
+<h3>2.2 The web lacks a content-weight contract</h3>
+<p>A client can request a URL, but it cannot reliably say: <em>give me the smallest trustworthy version of this resource.</em> A publisher can optimize a page, but cannot declare in a standardized, verifiable way: <em>this URL has a Sparse representation that preserves the core meaning and critical actions.</em></p>
+<p>Existing mechanisms each address part of the problem: responsive design adapts layout; progressive enhancement protects baseline functionality; reader modes extract content after the fact; <code>Save-Data</code> expresses a reduced-data preference; Client Hints communicate some device and network context; structured data helps crawlers; feeds provide alternate representations for some content types. What none of them provides is a <strong>general, named, testable delivery profile</strong> — a shared vocabulary that humans, tools, and machines can all use.</p>
+<p>The missing piece is not another framework. It is a contract.</p>
+<h3>2.3 Critical paths are hostage to rich delivery</h3>
+<p>Many of the web&#x27;s most important tasks should never depend on a full rich application: reading an emergency alert, checking a flight gate, viewing a bank balance, receiving a one-time code, confirming a medical instruction, submitting a government form. Yet these critical paths are routinely delivered through the same heavyweight pipeline used for immersive experiences.</p>
+<p>Nobody wants to defend &quot;our flood-warning page requires four megabytes of JavaScript and a tracker to load.&quot; S—ML gives teams the vocabulary to prevent it: <em>this page needs an S profile.</em></p>
+<p>The waste is not only experiential. Transferred bytes are the web&#x27;s most direct energy proxy: every redundant megabyte is powered at the data center, across the network, and on the device — multiplied by billions of page loads a day. Payload discipline is digital sustainability by another name, and a meaningful share of the web&#x27;s carbon footprint is, at root, a delivery-profile problem.</p>
+<h2>3. Proposal: S—ML Web</h2>
+<p>S—ML Web defines three delivery profiles for a single canonical resource:</p>
+<table>
+<thead><tr><th>Profile</th><th>Name</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><strong>S</strong></td><td>Sparse</td><td>Minimal, resilient, low-bandwidth, high-latency-tolerant, AI/crawler-friendly</td></tr>
+<tr><td><strong>M</strong></td><td>Medium</td><td>Normal mobile and everyday connected experience</td></tr>
+<tr><td><strong>L</strong></td><td>Luxe</td><td>Full rich experience with advanced media and interactivity</td></tr>
+</tbody>
+</table>
+<p>The same resource is delivered in different profiles depending on the user&#x27;s context, network conditions, device capabilities, accessibility requirements, or machine-consumption needs. The principle:</p>
+<blockquote><p><strong>One URL. Three weights. No separate internet.</strong></p></blockquote>
+<p>S—ML works with the existing web: URLs, HTML, HTTP, TLS, CSS, structured metadata, service workers, caching, and progressive enhancement. It is best understood as <strong>responsive delivery infrastructure</strong>. Where responsive design asks <em>how should this page adapt to the screen?</em>, S—ML asks <em>how should this resource adapt to the situation?</em></p>
+<h2>4. Profile Definitions</h2>
+<p>A note on emphasis before the definitions: two of the three profiles largely exist already. L is today&#x27;s default maximalist web — turn everything up. M is established mobile-first practice: responsive CSS, media queries, optimized images. S—ML names them so they become <em>declared, auditable</em> weights rather than accidents of whatever shipped. But the standard&#x27;s center of gravity is S — the profile the web is missing, and the one this specification spends its effort on.</p>
+<h3>4.1 S — Sparse</h3>
+<p>The Sparse profile is the minimal trustworthy representation of a resource. It is designed to survive the worst conditions — direct-to-device satellite, intermittent links, expensive or metered data, emergencies, low-power and embedded devices — and to serve the readers that never needed the interface at all: assistive technologies, crawlers, AI models, summarizers, archives, and agents.</p>
+<p>Latency tolerance is a consequence here, not the definition. Sparse is not a &quot;high-latency mode&quot;: on a fast, low-latency connection the same representation is simply <em>instant</em>. The benefit scales with how bad the link is — but it never disappears when the link is good. That is the kick: Sparse is the profile that wins everywhere and merely wins biggest where the network is worst.</p>
+<p>A conforming S representation should:</p>
+<ul><li>expose the canonical title, a concise summary, and the primary content or current state;</li><li>expose critical actions;</li><li>work without required client-side JavaScript for core content;</li><li>avoid third-party scripts, custom fonts, and heavy media by default;</li><li>minimize network requests and round trips;</li><li>use semantic HTML and include machine-readable metadata;</li><li>be server-rendered and available from the initial response;</li><li>support caching and preserve end-to-end security.</li></ul>
+<p>The S profile is not a degraded page. It is the page&#x27;s <strong>durable semantic core</strong> — fast, legible, accessible, cacheable, inspectable, and reliable. Sparse is not broken; sparse is resilient.</p>
+<h3>4.2 M — Medium</h3>
+<p>The Medium profile is the disciplined everyday experience: smartphones and tablets on ordinary cellular or Wi-Fi, touch-friendly layout, optimized images, moderate interactivity, progressive enhancement. JavaScript and personalization are welcome, but core content and critical actions must not be buried behind client-side complexity. M is the default for most connected use.</p>
+<h3>4.3 L — Luxe</h3>
+<p>The Luxe profile is the full expression: large screens, fast networks, powerful devices, high-resolution media, animation, realtime collaboration, complex visualization, immersive and application-like interfaces. Luxe is where the web can be cinematic. But Luxe is an enhancement — it must never be the <em>only</em> representation of important content.</p>
+<h2>5. Hydration: LoFi on the Wire, HiFi on the Screen</h2>
+<p>A natural objection to profiles is that they sound like three separate builds of every page. They are not — and the reason is hydration.</p>
+<p>The insight is familiar from MDX and from modern rendering architectures: a document can travel as something small and declarative, and be <strong>hydrated after transfer</strong> into something richer. Markdown crosses the wire as plain text; on the client it becomes live components. Server-rendered HTML crosses the wire inert; islands of it wake up into interactive applications.</p>
+<p>S—ML generalizes this: <strong>the Sparse profile is the wire format; Medium and Luxe are hydration states.</strong> Content is transferred LoFi and rendered HiFi — informally, <em>HyFi</em>: hydratable fidelity.</p>
+<p>Concretely, a client on a constrained link fetches the S representation — the semantic core, a few kilobytes, meaningful immediately. If and when conditions allow (bandwidth appears, the cache warms, the user opts in), the client hydrates upward: pulling optimized media to reach M, or the full interactive layer to reach L. The upgrade is incremental and interruptible. If the link drops mid-hydration, the user still has a complete, usable page — because S was complete on arrival.</p>
+<p>This inverts the failure mode of today&#x27;s web. A modern SPA that loses its connection mid-load leaves the user with a blank shell: HiFi on the wire, nothing on the screen. An S—ML page that loses its connection mid-hydration leaves the user with the whole story, minus decoration.</p>
+<h3>5.1 Doesn&#x27;t hydration make M and L redundant?</h3>
+<p>If S can hydrate all the way to Luxe, why define M and L at all? And conversely — islands architecture, server components, and resumability frameworks already do partial hydration, so what does S—ML add?</p>
+<p>The answer to both is the same: <strong>hydration is a technique; S—ML is the contract.</strong></p>
+<p>Today&#x27;s hydration strategies are private implementation details of individual frameworks. There is no way for a client to <em>request</em> the un-hydrated core, no way for a publisher to <em>promise</em> that the core is complete and self-sufficient, and no way for a tool to <em>verify</em> either claim. A framework can ship a beautiful islands architecture whose baseline HTML is still 900 KB and meaningless without JavaScript — and nothing calls that out.</p>
+<p>S—ML names the layers and puts budgets on them. S is not &quot;whatever happens to be in the initial response&quot;; it is a certified representation with declared guarantees. M and L are not &quot;whatever the bundle grows into&quot;; they are declared weights a client can request directly — because many clients (a seatback screen, a crawler, an AI agent, a metered connection) will <em>never</em> want to hydrate past a given profile, and must be able to say so.</p>
+<p>So hydration does not replace the profiles. It is the preferred way to <em>implement</em> them from a single source: author the semantic core once, and let M and L be enhancement layers over it rather than separate products. The contract makes the technique legible, requestable, and testable — which is precisely what the technique alone has never had.</p>
+<h3>5.2 The everyday analogy: progressive image loading</h3>
+<p>For anyone who has watched a progressive JPEG load — a recognizable image appearing immediately, then sharpening as more bytes arrive — S—ML is that idea applied to entire pages: a useful first pass, refined by further passes when conditions allow.</p>
+<p>But the analogy earns its keep only with its two differences stated. First, <em>completeness</em>: nobody wants a progressive image that stops after one pass, because an image&#x27;s first pass is a preview — legible, but degraded. The Sparse pass is not a preview. It is the complete information of the page — everything the reader came for, minus the decoration. Stopping at Sparse is not settling for a blur; it is receiving the whole message at the lowest cost. Second, <em>negotiation</em>: a progressive image always refines to full resolution if the bytes keep coming — the client has no say. Under S—ML, refinement is a contract term: a client can request the first pass and stop there, a publisher promises that pass is genuinely complete, and a tool can verify both.</p>
+<p>S—ML is progressive loading with a contract — and a complete first pass.</p>
+<blockquote><p>Cache Sparse. Serve Medium. Enhance to Luxe.</p></blockquote>
+<h2>6. S—ML and AI</h2>
+<p>The name reads three ways, and all are intended: <strong>S</strong>parse–<strong>M</strong>edium–<strong>L</strong>uxe; <strong>S — ML</strong>, the Sparse profile as the representation machine learning reads; and plain <strong>sml</strong> — &quot;small&quot; with the vowels compressed out, which is exactly what the Sparse profile does to a page.</p>
+<p>S—ML is naturally AI-friendly. Models, crawlers, summarizers, and agents need the semantic meaning of a page more than its visual presentation — yet today they must parse large, noisy documents full of layout wrappers, scripts, navigation, cookie banners, and tracking code before reaching the content.</p>
+<p>A useful analogy is Markdown front matter: a compact YAML header that tells the reader what a file is about before the body is parsed. A web resource should offer the same orientation layer. Example:</p>
+<pre><code class="lang-yaml">profile: S
+canonical: https://example.com/flight/BA123
+title: &quot;BA123 London to Lisbon&quot;
+summary: &quot;Flight BA123 departs from Gate B12. Boarding begins at 14:35.&quot;
+type: flight_status
+updated: 2026-07-07T12:30:00Z
+critical_state:
+  status: boarding
+  gate: B12
+critical_actions:
+  - text: &quot;Show boarding pass&quot;
+    href: &quot;/flight/BA123/boarding-pass?profile=s&quot;
+profiles: [s, m, l]</code></pre>
+<p>For AI systems, S—ML offers lower token and bandwidth cost, cleaner extraction and summarization, more reliable citation, clearer canonical identity, easier action discovery, and better alignment between what publishers intend and what machines infer. For publishers, it is a way to expose meaning deliberately rather than surrendering it to scraping heuristics.</p>
+<p>The Sparse profile becomes the page&#x27;s <strong>public semantic minimum</strong> — and, in hydration terms, the exact artifact a machine consumes is the same artifact a browser hydrates. One core, every reader.</p>
+<h3>6.1 AI as author: the vibe-coding web</h3>
+<p>AI is not only a reader of the web; it is rapidly becoming its principal author. A growing share of new websites is generated conversationally — &quot;vibe coded&quot; — by people with no background in performance engineering, and often no awareness that a page <em>has</em> a weight. The generation tools they use inherit their defaults from the existing web&#x27;s norms, which means the bloat of the modern web is now being amplified at machine speed: every generated landing page ships the full framework, the font pack, the animation library, and the analytics snippet, because that is what the training distribution looks like. The people least equipped to notice the problem are now producing the most pages.</p>
+<p>S—ML addresses this at the layer where it can actually be fixed: not the author, but the tooling. A generation tool, agent skill, or scaffold that targets the S—ML contract produces conformant pages regardless of what its user knows. The author says &quot;make me a site&quot;; the tooling authors the semantic core first, layers enhancements behind profile gates, sets the negotiation headers, and runs the audit — and the notion of hydration is <em>inferred</em>, not something the author ever needs to learn. The standard&#x27;s most demanding concepts become implementation details of the tools.</p>
+<p>This inverts the classic adoption problem. Web standards have historically spread at the speed of developer education — millions of humans individually persuaded to change their habits. In a vibe-coded web, conformance spreads at the speed of tooling updates: encode the contract into the handful of generation tools, skills, and templates people actually use, and every page they emit is born conforming. The vibe coder gets resilience, AI-readability, and performance without asking for them; the web gets a generation of new pages that are light by default. Vibe code at ease — the tooling knows the standard so the author doesn&#x27;t have to.</p>
+<h2>7. Discovery and Negotiation</h2>
+<p>S—ML works with ordinary URLs. A basic implementation may use explicit parameters:</p>
+<pre><code>https://example.com/article/123?profile=s</code></pre>
+<p>A mature implementation negotiates over HTTP:</p>
+<pre><code>Client:  Accept-Profile: s
+         Save-Data: on
+
+Server:  Content-Profile: s
+         Available-Profiles: s, m, l
+         Content-Budget: 42kb</code></pre>
+<p>And declares alternates in HTML:</p>
+<pre><code class="lang-html">&lt;link rel=&quot;alternate&quot; type=&quot;text/html&quot; data-profile=&quot;s&quot; href=&quot;?profile=s&quot;&gt;</code></pre>
+<p>(<code>data-profile</code> uses <code>data-*</code>, HTML&#x27;s valid extension mechanism, and stays as plain as the header names it mirrors. A future standards-track version could graduate to an unprefixed <code>profile</code> attribute.)</p>
+<p>The exact syntax should evolve through prototypes and standards discussion. The principles are fixed: clients can request a profile; servers declare what they delivered; crawlers and AI systems can discover the Sparse representation; audit tools can test conformance. Negotiation should build on existing mechanisms like <code>Save-Data</code>, and must prefer explicit user preference over silent device sniffing to avoid enlarging fingerprinting surface.</p>
+<h2>8. Conformance and Budgets</h2>
+<p>S—ML must be measurable. A page must not claim Sparse support while shipping a large application that hides content until hydration completes. A proposed early budget model:</p>
+<table>
+<thead><tr><th>Requirement</th><th>S</th><th>M</th><th>L</th></tr></thead>
+<tbody>
+<tr><td>Initial payload</td><td>≤ 50 KB</td><td>≤ 500 KB</td><td>Open</td></tr>
+<tr><td>Core content without JS</td><td>Required</td><td>Recommended</td><td>Optional</td></tr>
+<tr><td>Third-party scripts</td><td>None by default</td><td>Limited</td><td>Allowed</td></tr>
+<tr><td>Custom fonts</td><td>Avoid</td><td>Optional</td><td>Allowed</td></tr>
+<tr><td>Required round trips</td><td>≤ 2</td><td>≤ 5</td><td>Open</td></tr>
+<tr><td>Machine-readable summary</td><td>Required</td><td>Recommended</td><td>Recommended</td></tr>
+<tr><td>End-to-end TLS</td><td>Required</td><td>Required</td><td>Required</td></tr>
+</tbody>
+</table>
+<p>A clarification on the JavaScript row, because it is the most debated: the rule measures <strong>dependency, not presence</strong>. Scripts are permitted in every profile and simply count against the payload budget — which weights them automatically, and rewards tree-shaken, profile-gated bundles. What Sparse requires is that core content and critical actions survive with scripting <em>unavailable</em>, because for many Sparse readers — e-ink browsers, crawlers, agents, embedded clients — JavaScript is not slow; it is absent. A pure weight limit on scripts would not protect those readers; the dependency rule does, and the byte budget handles the weight.</p>
+<p>An audit tool makes the contract real:</p>
+<pre><code>$ npx sml-audit https://example.com/weather-alert
+
+S Profile: FAIL
+- Initial payload: 184 KB, budget: 50 KB
+- Main content unavailable without JavaScript
+- 7 third-party requests before main content
+- Missing machine-readable summary
+
+M Profile: PASS
+L Profile: PASS</code></pre>
+<p>The exact thresholds should be debated. The existence of budgets should not. S—ML should feel like a missing Lighthouse category — a contract, not a vibe.</p>
+<p>The budgets also read directly as carbon budgets. A page that declares and meets S has, in the same breath, declared and met a data-carbon ceiling — giving digital-sustainability teams the thing &quot;green web&quot; pledges have chronically lacked: a named, auditable unit of reduction.</p>
+<h2>9. Sector Perspectives</h2>
+<h3>9.1 Satellite connectivity</h3>
+<p>Direct-to-device satellite is extending the web into places where terrestrial networks are unavailable, congested, damaged, or uneconomical. Satellite links are constrained not just in bandwidth but in latency, link availability, spectrum efficiency, power, beam capacity, and cost per delivered bit.</p>
+<p>The cellular industry has already made the architectural move S—ML proposes — one layer down. 3GPP&#x27;s Non-Terrestrial Networks (NTN) work, normative since Release 17, standardizes satellite access (LEO, MEO, GEO, high-altitude platforms) as an <em>extension of the 4G/5G architecture</em> rather than a proprietary parallel system: the cell tower is simply no longer on the ground. That is precisely the design decision S—ML makes at the application layer — extend the existing standard, never fork it:</p>
+<blockquote><p><strong>3GPP NTN</strong> — satellite-aware cellular connectivity.<br>
+<strong>S—ML Web</strong> — satellite-aware web delivery.</p></blockquote>
+<p>The two are complementary, not competing. NTN solves access: cellular-grade connectivity over the satellite link. It cannot solve what applications push across that link. A standards-compliant NTN connection dutifully delivering an 8 MB script-heavy page is a solved network layer serving an unsolved application layer. S—ML completes the stack — and the pitch to operators writes itself: NTN made your satellites part of the cellular standard; S—ML makes the web&#x27;s payloads worthy of the link.</p>
+<p>S—ML gives operators and their partners a way to say <strong>&quot;this service is satellite-ready&quot;</strong> — not via a separate satellite web, but because it supports a Sparse profile designed for constrained delivery. Immediate applications include emergency messaging, weather and disaster information, lightweight government services, travel and logistics updates, maritime and remote field operations, and AI-assisted retrieval over limited links. Hydration fits this environment precisely: deliver S over the satellite link, hydrate toward M or L from cache or when a terrestrial network returns. And when a user needs only the Sparse representation, the network is never forced to carry the Luxe one — good for users, publishers, and operators alike.</p>
+<h3>9.2 Aviation and inflight entertainment</h3>
+<p>The aviation industry is moving toward web-based passenger, crew, and operational interfaces — IFE systems, passenger portals, onboard retail, safety information, crew tools. Aircraft cabins are a distinctive delivery environment: intermittent high-latency satellite backhaul shared across hundreds of passengers, embedded browsers on certified hardware lifecycles, offline operation, multilingual content, and strict reliability expectations.</p>
+<p>S—ML maps directly onto this. The same resource serves the S profile for flight status, gate and connection information, safety content, and critical notices; the M profile for the seatback and passenger-device portal; the L profile for rich entertainment discovery, interactive maps, and commerce when bandwidth and hardware allow. The operational strategy is the hydration strategy: <strong>cache Sparse, serve Medium, enhance to Luxe.</strong></p>
+<h3>9.3 Travelers, roaming, and data-constrained users</h3>
+<p>The most universal beneficiary of the Sparse profile needs no special hardware or industry at all: anyone whose data is expensive relative to their need. The traveler on a roaming plan where a single modern page load costs real money. The user in a remote area rationing a weak connection. The person on a metered or prepaid plan for whom data cost is a daily budgeting decision. For all of them, today&#x27;s web offers a bad bargain: to read a train time, they must buy the whole application.</p>
+<p>There is strong historical evidence of this demand. Initiatives such as Facebook&#x27;s Lite clients and the Free Basics program demonstrated that lightweight delivery unlocks enormous audiences in connectivity-constrained and cost-constrained markets. But they also demonstrated the wrong architecture: a curated subset of the web, mediated by a single company, drew sustained net-neutrality criticism and regulatory rejection precisely because a gatekeeper decided which services deserved to be light. The demand was validated; the delivery model was not. S—ML answers the same demand as an open contract: <em>every</em> URL can carry a Sparse representation, no gatekeeper chooses the catalog, and the same standards and security apply everywhere.</p>
+<p>The mechanism for these users is deliberately simple: a pinned browser preference. A user should be able to set &quot;Sparse only&quot; for a trip, a network, or permanently — one setting, sent as <code>Accept-Profile: s</code>, honored by every conforming site (the specification already requires user agents to support exactly this, and treats <code>Save-Data: on</code> as the same request). Operators can build on it too: a &quot;roaming mode&quot; that pins Sparse could be offered at the plan level, cutting subscriber bills and network load in the same gesture — data saving as a delivery contract rather than a compression proxy.</p>
+<p>The same binding extends naturally to battery. Bytes cost energy twice — once at the radio, again in parsing, script execution, and rendering — so a device conserving power should also be conserving weight. Browsers already gesture at this: Safari, for example, stops videos auto-playing when Low Power Mode is on. S—ML turns that scattering of ad-hoc mitigations into one coherent behavior: <strong>battery saver on → user agent requests <code>Accept-Profile: s</code></strong>, and the whole page arrives lighter, not just its videos. Done this way the signal is also privacy-preserving: the site never learns the battery level (a signal browsers have historically had to withdraw from page access precisely because it was abused for tracking) — it only receives a profile request, which the user agent mediates and the user can override.</p>
+<h2>10. The Human Argument: An Inhabited Internet Needs a Quiet Layer</h2>
+<p>The environmental historian Laura J. Martin observes that &quot;the internet has stopped being a place we visit — it&#x27;s now an environment we inhabit&quot; (<a href="https://www.noemamag.com/limiting-not-just-screen-time-but-screen-space/">Noema, 2026</a>): what began as a window fixed in domestic space has become weather, an ambient condition we move through and adapt our bodies to. That trajectory is real, and this paper does not argue against it. The immersive, spatial, inhabited internet is the honest destination of the L profile — Luxe exists precisely because some of the web&#x27;s most valuable experiences are environments, and they deserve first-class support.</p>
+<p>But Martin&#x27;s deeper claim cuts the other way, and S—ML should answer it. We have learned to treat the internet, AI, and the &quot;cloud&quot; as placeless and infinite, when in fact the cloud is heavy industry and humans live in bodies, in shared physical rooms. An internet that is only environment offers no exit: today, even glancing at a train time means stepping into weather — pages engineered to extend the visit, feeds with no wings and no place to step off. The old web had an ethic of interruption (&quot;brb&quot; — the body in a room, waiting to return); the modern web deleted it, and with it the ability to <em>visit</em> the internet at all.</p>
+<p>The S profile is that ability, restored as infrastructure. It is the information-only layer: get the fact, perform the action, return to the room. Its byte budgets double as attention budgets — no autoplay, no third-party engagement machinery, nothing whose economic job is to detain. S is the web&#x27;s quiet room inside the inhabited house: not a retreat from the digital, but a lighter way of touching it, available at every URL rather than only at a &quot;digital detox.&quot;</p>
+<p>This also dignifies a class of hardware the heavy web has abandoned: deliberately minimal, &quot;mono&quot; devices — e-ink readers, distraction-free phones, wearables, single-purpose terminals. Under S—ML these are not degraded clients squinting at a desktop site; they are full citizens of the web, served a representation designed for them. Choosing a lighter relationship with the internet should not mean losing access to it.</p>
+<p>S—ML does not moralize between immersion and restraint. It makes the weight of an experience the reader&#x27;s choice rather than the publisher&#x27;s default — which is precisely what a healthy physical–digital balance requires. Limit screen time, limit screen space — and let people choose their screen weight.</p>
+<h2>11. Relationship to Existing Practice — and What S—ML Is Not</h2>
+<p>S—ML aligns with, and packages, existing web principles: progressive enhancement, semantic HTML, accessibility, structured data, responsive design, performance budgets, sustainability, offline-first design, and privacy-preserving preferences. It replaces none of them; it gives them a shared, testable vocabulary.</p>
+<p>History offers a caution here. Earlier attempts to serve constrained clients — separate mobile markup, operator gateways, parallel content ecosystems — failed because they built a second web beside the web. S—ML deliberately takes the opposite path: it never leaves the web&#x27;s standards, URLs, or security model.</p>
+<p>S—ML is <strong>not</strong>: a new browser, a replacement for HTML or responsive design, a new framework, a new transport protocol, a carrier gateway, a separate satellite internet, a stripped-down web for constrained users, or a revival of WAP.</p>
+<p>S—ML <strong>is</strong>: a delivery-profile standard, a publishing discipline, a conformance target, an AI-readable content contract, and a vocabulary for context-aware web delivery.</p>
+<h2>12. Status and Roadmap</h2>
+<p>S—ML is a community specification and tooling effort, useful with today&#x27;s web from day one — no browser changes required.</p>
+<p><strong>Available now:</strong> S—ML Web Profile 0.1, the draft specification, published as a standalone document (see Normative Specification below); <code>sml-audit</code>, an open-source, zero-dependency conformance CLI with CI-friendly output; and the project site — which itself conforms to the Sparse profile it describes.</p>
+<p><strong>On the roadmap:</strong> a reference demonstration of one URL rendered in all three profiles, including hydration across a degrading link; CI recipes and a GitHub Action; adapters and examples for content-first frameworks; conformance badges; and, as independent implementations appear, a W3C Community Group to carry the specification forward.</p>
+<p><strong>How to participate:</strong> implement a Sparse representation for one critical page and run the auditor against it. Bring the results — including disagreements with the budgets and edge cases the spec doesn&#x27;t cover — back to the community. Teams operating under real delivery constraints (satellite and constrained-network services, aviation, emergency information, public sector, embedded web) are especially invited to pilot, because their conditions are the ones the Sparse profile must be proven against.</p>
+<p>The premise anyone can act on today, no coordination required: <strong>the critical path should work in Sparse mode.</strong></p>
+<h2>13. Design Decisions and Open Questions</h2>
+<h3>13.1 Resolved for 0.1</h3>
+<ol><li><strong>Naming.</strong> The profiles are <strong>Sparse</strong>, <strong>Medium</strong>, and <strong>Luxe</strong> — one name per profile, used identically in prose, marketing, and spec text. No split between a technical term and a public term; the split itself would be a source of confusion. &quot;Mobile&quot; may be used informally to describe the Medium profile&#x27;s typical context, but the profile&#x27;s name is Medium.</li><li><strong>Budgets.</strong> The default Sparse budget is 50 KB initial payload, expressed as the budget class <code>S-50</code>. Declared classes allow finer contracts where one threshold is too coarse: <code>S-14</code> (fits within a typical first TCP/QUIC congestion window — one round trip, content on screen), <code>S-50</code>, <code>S-100</code>, and <code>M-500</code>, <code>M-1000</code>. A page declares its class; the auditor holds it to it.</li><li><strong>JavaScript in Sparse.</strong> Core content and critical actions must never <em>require</em> JavaScript. JavaScript itself is not banned: scripts are welcome within the byte budget, which in practice rewards tree-shaken, minimal, profile-gated bundles. The constraint is dependency, not presence.</li><li><strong>Negotiation privacy.</strong> <code>Accept-Profile</code> is a single low-entropy header with three possible values, set by explicit user or user-agent preference, with no vendor extensions permitted. Servers must not infer profiles from fingerprinting-adjacent signals. This follows the precedent set by <code>Save-Data</code>.</li><li><strong>Machine-readable layer.</strong> JSON-LD, complementing (not replacing) the meta description. It is already understood by crawlers, validators, and AI systems; inventing a parallel format would repeat the mistake this standard exists to avoid.</li><li><strong>Form state across hydration.</strong> Resolved by construction: a critical form must be the <em>same element</em> across profiles — same action, same method, same field names. Hydration may enhance its presentation but never replaces it, so state entered at Sparse weight survives an upgrade to Medium or Luxe because the form never changed.</li><li><strong>Tooling integration.</strong> Conformance auditing should live everywhere developers already look: CLI, CI, and eventually browser developer tools as a Lighthouse-class category. The measurement layer should be free and ubiquitous.</li><li><strong>Governance.</strong> Staged. Now: a community specification with reference tooling, iterated through real deployments. Next: a W3C Community Group as adoption grows. Then: formal standards-track submission (the HTTP headers likely via the IETF) once multiple independent implementations exist. Standardizing before implementations exist would trade momentum for committee time.</li></ol>
+<h3>13.2 Still open</h3>
+<ol><li><strong>Content equivalence verification.</strong> How should tooling verify that profiles agree on title, summary, state, and critical actions — particularly when Medium and Luxe are authored separately rather than hydrated from Sparse? A hierarchical correspondence (matching headings, sections, and actions across representations) is the likely direction.</li><li><strong>Authenticated and personalized resources.</strong> How should Sparse representations of logged-in pages work — privacy-safe critical-state subsets, private cache scoping, prioritization of which personalized state belongs in the Sparse core? This needs prototyping with a real transactional service before it is specified.</li><li><strong>Advertising.</strong> How do ad-supported publishers participate? Sparse&#x27;s budgets exclude third-party ad tech by construction, but advertising itself is not banned: a first-party, inline, lightweight ad — closer to a print placement or a text ad than to programmatic display — fits within budget. Whether Sparse needs a standardized lightweight ad unit, and whether publishers will accept profile-dependent monetization, is open — and probably decisive for news adoption.</li><li><strong>Declarative profile syntax.</strong> Should profiles get first-class CSS/HTML syntax, letting authors express delivery weight in the same idiom responsive design uses for screens — for example a media query like <code>@media (profile: sparse)</code>, aligned with the existing <code>prefers-reduced-data</code> proposal, or standardized attributes for profile-gated resources? This would make profile authoring feel native to web developers rather than bolted on.</li></ol>
+<h2>14. Conclusion</h2>
+<p>The web should not assume abundance. A resource may be consumed on a fast desktop, a satellite-connected handset, an aircraft seatback, an assistive reader, or by an AI model trying to understand the page. These are no longer edge cases; they are normal conditions of a planetary web.</p>
+<p>Responsive design made the web flexible at the level of layout. The next evolution is responsive delivery: one canonical resource, published once, delivered by constraint — small enough to survive any link, and hydratable to the richest experience the situation allows. A web that fits the situation is also a web that wastes less: fewer bytes moved is fewer joules burned, at planetary scale.</p>
+<p>One URL. Three weights. No separate internet.</p>
+<p>Sparse for resilience. Medium for mobility. Luxe for full expression.</p>
+<p>That is S—ML.</p>
+<hr>
+<h2>Normative Specification</h2>
+<p>The normative text of this proposal — <strong>S—ML Web Profile 0.1 (Draft)</strong> — is maintained as a standalone document so it can version independently of this paper. It defines the profile identifiers, discovery, negotiation rules, the Sparse representation&#x27;s requirements, budgets and budget classes, content equivalence, hydration rules, conformance, and security and privacy considerations.</p>
+<p>Read it at <a href="/spec/"><strong>/spec/</strong></a> (raw Markdown: <a href="/downloads/spec.md"><code>/downloads/spec.md</code></a>).</p>
+</main>
+
+<footer class="site">
+  <p class="muted">S—ML Web · CC BY 4.0 · <a href="/downloads/paper.md">Download raw Markdown</a> · <a href="https://github.com/smlweb-org">github.com/smlweb-org</a></p>
+</footer>
+
+</body>
+</html>
