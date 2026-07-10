@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>S—ML Web Profile 0.1 — Draft Specification</title>
+<title>S—ML Web Profile 0.4 — Draft Specification</title>
 <meta name="description" content="Normative draft spec: profile identifiers, discovery, negotiation, Sparse requirements, budgets, content equivalence, hydration, conformance.">
 <link rel="canonical" href="https://smlweb.org/spec/">
 <link rel="alternate" type="text/markdown" href="https://github.com/smlweb-org/spec/blob/main/spec.md" title="Raw Markdown">
@@ -68,7 +68,7 @@ footer.site a{color:var(--muted)}
 </header>
 
 <main class="prose">
-<h1>S—ML Web Profile 0.1 (Draft Specification)</h1>
+<h1>S—ML Web Profile 0.4 (Draft Specification)</h1>
 <p><em>Status: draft for community review. This is the normative specification, maintained independently of the S—ML position paper. Header names, thresholds, and syntax are provisional. The key words MUST, MUST NOT, SHOULD, and MAY are to be interpreted as described in RFC 2119.</em></p>
 <h2>A.1 Definitions</h2>
 <ul><li><strong>Resource</strong> — the canonical logical content at a URL: identity, title, summary, primary content or state, and critical actions.</li><li><strong>Representation</strong> — a concrete delivery of a resource in a given profile.</li><li><strong>Profile</strong> — a named delivery weight with declared budgets. This specification defines three profile identifiers: <code>s</code>, <code>m</code>, <code>l</code>.</li><li><strong>Critical actions</strong> — the operations a user must be able to perform from the resource (e.g., check in, mark safe, confirm).</li><li><strong>Hydration</strong> — client-side enhancement of a lighter representation toward a heavier profile after initial delivery.</li></ul>
@@ -89,25 +89,26 @@ Content-Profile: m</code></pre>
 <ul><li>contain the resource&#x27;s canonical title, summary, primary content or current state, and critical actions in the initial response body;</li><li>be usable without executing client-side JavaScript (JavaScript MAY be present within budget as enhancement — tree-shaken and profile-gated — but core content and critical actions MUST NOT depend on it);</li><li>include no third-party scripts;</li><li>be served over TLS end to end, with no intermediary transcoding gateway;</li><li>include a machine-readable summary (meta description, JSON-LD, or equivalent structured block);</li><li>declare its canonical URL.</li></ul>
 <p>It SHOULD: avoid custom fonts; keep images optional or heavily compressed; be cacheable; complete core delivery within its round-trip budget.</p>
 <h2>A.5 Budgets (provisional)</h2>
+<p><strong>Normative budgets exist only for <code>s</code>.</strong> The Sparse profile is this standard&#x27;s center of gravity and the only profile whose weight is a conformance requirement. The <code>m</code> column records <em>recommendations</em> — a disciplined target for the everyday experience, not a conformance gate. <code>l</code> is unconstrained by design: Luxe is where publishers do whatever they want. The only requirements that bind every profile are content equivalence (A.6) and end-to-end TLS.</p>
 <table>
-<thead><tr><th>Requirement</th><th>s</th><th>m</th><th>l</th></tr></thead>
+<thead><tr><th>Requirement</th><th>s (normative)</th><th>m (recommended)</th><th>l</th></tr></thead>
 <tbody>
-<tr><td>Initial payload (HTML + render-blocking subresources)</td><td>≤ 50 KB</td><td>≤ 500 KB</td><td>open</td></tr>
+<tr><td>Initial payload (HTML + render-blocking subresources)</td><td>≤ 50 KB</td><td>≤ 1 MB</td><td>open</td></tr>
 <tr><td>Core content without JS</td><td>MUST</td><td>SHOULD</td><td>MAY</td></tr>
-<tr><td>Third-party scripts</td><td>MUST NOT</td><td>≤ 5 hosts</td><td>open</td></tr>
+<tr><td>Third-party scripts</td><td>MUST NOT</td><td>keep few</td><td>open</td></tr>
 <tr><td>Custom fonts</td><td>SHOULD NOT</td><td>MAY</td><td>MAY</td></tr>
 <tr><td>Round trips before core content</td><td>≤ 2</td><td>≤ 5</td><td>open</td></tr>
 <tr><td>Machine-readable summary</td><td>MUST</td><td>SHOULD</td><td>SHOULD</td></tr>
 <tr><td>End-to-end TLS</td><td>MUST</td><td>MUST</td><td>MUST</td></tr>
 </tbody>
 </table>
-<p>Budget classes (<code>S-14</code>, <code>S-50</code>, <code>S-100</code>, <code>M-500</code>, <code>M-1000</code>) MAY be declared where a single threshold is too coarse; a declared class is auditable like any budget. <code>S-50</code> is the default Sparse class.</p>
+<p>Sparse budget classes (<code>S-14</code>, <code>S-50</code>, <code>S-100</code>) MAY be declared where a single threshold is too coarse; a declared class is auditable like any budget. <code>S-50</code> is the default Sparse class. A publisher MAY additionally declare an <code>m</code> class (<code>M-500</code>, <code>M-1000</code>) to make the recommendation binding for its own pages; absent such a declaration, tooling MUST report <code>m</code> deviations as advisories, never failures.</p>
 <h2>A.6 Content equivalence</h2>
 <p>All profiles of a resource MUST agree on canonical title, summary, current state, and the set of critical actions. Heavier profiles MAY add content and capability; they MUST NOT contradict or omit the critical path present in <code>s</code>. A resource whose <code>s</code> representation cannot perform a critical action available in <code>l</code> is non-conforming.</p>
 <h2>A.7 Hydration (informative)</h2>
 <p>The <code>s</code> representation MAY serve as the wire format from which <code>m</code> and <code>l</code> are hydrated client-side. Where hydration is used: core content MUST be complete and usable before any hydration begins; hydration MUST be interruptible without loss of content or entered state; and a client that has requested <code>s</code> MUST NOT be forced to hydrate past it.</p>
 <h2>A.8 Conformance</h2>
-<p>A representation conforms to a profile if it meets every MUST and its budgets. Claims are made via <code>Content-Profile</code> and are auditable by tools (see <code>sml-audit</code>). Tools SHOULD report MUST violations as failures and SHOULD violations as warnings.</p>
+<p>A representation conforms to a profile if it meets every MUST and its normative budgets. In practice this means <code>s</code> conformance is strict (budgets and requirements), while <code>m</code> and <code>l</code> conformance reduces to content equivalence, TLS, and any budget class the publisher has voluntarily declared. Claims are made via <code>Content-Profile</code> and are auditable by tools (see <code>sml-audit</code>). Tools SHOULD report MUST violations as failures and SHOULD violations and recommendations as warnings.</p>
 <h2>A.9 Security and privacy considerations</h2>
 <p>S—ML introduces no intermediary: representations are origin-served over end-to-end TLS, unlike historical gateway-based mobile architectures. Profile negotiation adds one low-entropy request header; implementations MUST NOT extend it with device-identifying detail, and user agents SHOULD let users pin a profile preference globally (e.g., &quot;always Sparse on metered links&quot;).</p>
 </main>

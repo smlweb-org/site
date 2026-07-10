@@ -13,7 +13,7 @@ DOCS = [
     {
         "src": "../spec/spec.md",
         "out": "spec/index.html",
-        "title": "S—ML Web Profile 0.1 — Draft Specification",
+        "title": "S—ML Web Profile 0.4 — Draft Specification",
         "description": "Normative draft spec: profile identifiers, discovery, negotiation, Sparse requirements, budgets, content equivalence, hydration, conformance.",
         "canonical": "https://smlweb.org/spec/",
         "md_alt": "https://github.com/smlweb-org/spec/blob/main/spec.md",
@@ -22,7 +22,7 @@ DOCS = [
     {
         "src": "../spec/paper.md",
         "out": "paper/index.html",
-        "title": "S—ML Web — Position Paper (Draft 0.2)",
+        "title": "S—ML Web — Position Paper (Draft 0.4)",
         "description": "Full rationale: hydration model, AI consumption, satellite/NTN, aviation, roaming, sustainability, digital balance.",
         "canonical": "https://smlweb.org/paper/",
         "md_alt": "https://github.com/smlweb-org/spec/blob/main/paper.md",

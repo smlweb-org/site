@@ -4,8 +4,8 @@
 
 ## Spec
 - [Overview](https://smlweb.org/): What S—ML is, the profiles, protocol, budgets
-- [S—ML Web Profile 0.1 (HTML)](https://smlweb.org/spec/): Normative draft spec — definitions, discovery, negotiation, Sparse requirements, budgets, content equivalence, hydration, conformance
-- [S—ML Web Profile 0.1, raw Markdown](https://raw.githubusercontent.com/smlweb-org/spec/main/spec.md): Same spec, machine-ingestible, always current
+- [S—ML Web Profile 0.4 (HTML)](https://smlweb.org/spec/): Normative draft spec — definitions, discovery, negotiation, Sparse requirements, budgets, content equivalence, hydration, conformance
+- [S—ML Web Profile 0.4, raw Markdown](https://raw.githubusercontent.com/smlweb-org/spec/main/spec.md): Same spec, machine-ingestible, always current
 - [Position paper (HTML)](https://smlweb.org/paper/): Full rationale — hydration model, AI consumption, satellite/NTN, aviation, roaming, sustainability, digital balance
 - [Position paper, raw Markdown](https://raw.githubusercontent.com/smlweb-org/spec/main/paper.md): Same paper, machine-ingestible, always current
 - [Full text for LLMs](https://smlweb.org/llms-full.txt): Flattened spec text for direct ingestion
