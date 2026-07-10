@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build HTML reader pages from downloads/spec.md and downloads/paper.md. Zero dependencies."""
+"""Build HTML reader pages from the canonical Markdown in ../spec (single source, no copies). Zero dependencies."""
 
 from __future__ import annotations
 
@@ -11,21 +11,21 @@ ROOT = Path(__file__).resolve().parent
 
 DOCS = [
     {
-        "src": "downloads/spec.md",
+        "src": "../spec/spec.md",
         "out": "spec/index.html",
         "title": "S—ML Web Profile 0.1 — Draft Specification",
         "description": "Normative draft spec: profile identifiers, discovery, negotiation, Sparse requirements, budgets, content equivalence, hydration, conformance.",
         "canonical": "https://smlweb.org/spec/",
-        "md_alt": "/downloads/spec.md",
+        "md_alt": "https://github.com/smlweb-org/spec/blob/main/spec.md",
         "nav_active": "spec",
     },
     {
-        "src": "downloads/paper.md",
+        "src": "../spec/paper.md",
         "out": "paper/index.html",
         "title": "S—ML Web — Position Paper (Draft 0.2)",
         "description": "Full rationale: hydration model, AI consumption, satellite/NTN, aviation, roaming, sustainability, digital balance.",
         "canonical": "https://smlweb.org/paper/",
-        "md_alt": "/downloads/paper.md",
+        "md_alt": "https://github.com/smlweb-org/spec/blob/main/paper.md",
         "nav_active": "paper",
     },
 ]

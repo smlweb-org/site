@@ -1,8 +1,15 @@
-# Legacy download paths → /downloads/ (Netlify / Cloudflare Pages)
-/llms.txt              /downloads/llms.txt              200
-/llms-full.txt         /downloads/llms-full.txt         301
-/spec.md               /downloads/spec.md               301
-/paper.md              /downloads/paper.md              301
-/sml-audit.zip         /downloads/sml-audit.zip         301
-/s-ml-align.zip        /downloads/s-ml-align.zip        301
-/s-ml-align.skill      /downloads/s-ml-align.skill      301
+# Legacy paths → current homes (Netlify / Cloudflare Pages format).
+# Documents and tools live in their canonical GitHub repos; the site indexes them.
+/downloads/llms.txt        /llms.txt                                                                301
+/downloads/llms-full.txt   /llms-full.txt                                                           301
+/spec.md                   https://github.com/smlweb-org/spec/blob/main/spec.md                     301
+/downloads/spec.md         https://github.com/smlweb-org/spec/blob/main/spec.md                     301
+/paper.md                  https://github.com/smlweb-org/spec/blob/main/paper.md                    301
+/downloads/paper.md        https://github.com/smlweb-org/spec/blob/main/paper.md                    301
+/sml-audit.zip             https://github.com/smlweb-org/sml-audit/archive/refs/heads/main.zip      301
+/downloads/sml-audit.zip   https://github.com/smlweb-org/sml-audit/archive/refs/heads/main.zip      301
+/sml-audit.js              https://raw.githubusercontent.com/smlweb-org/sml-audit/main/sml-audit.js 301
+/s-ml-align.zip            https://github.com/smlweb-org/skills/archive/refs/heads/main.zip         301
+/downloads/s-ml-align.zip  https://github.com/smlweb-org/skills/archive/refs/heads/main.zip         301
+/s-ml-align.skill          https://github.com/smlweb-org/skills/raw/main/s-ml-align.skill           301
+/downloads/s-ml-align.skill https://github.com/smlweb-org/skills/raw/main/s-ml-align.skill          301

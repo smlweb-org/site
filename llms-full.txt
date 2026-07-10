@@ -1,3 +1,7 @@
+# S—ML Web — full text for LLMs
+
+Source: https://smlweb.org/ · Canonical: https://github.com/smlweb-org/spec · License: CC BY 4.0 · Last updated: 2026-07-10
+
 # S—ML Web Profile 0.1 (Draft Specification)
 
 *Status: draft for community review. This is the normative specification, maintained independently of the S—ML position paper. Header names, thresholds, and syntax are provisional. The key words MUST, MUST NOT, SHOULD, and MAY are to be interpreted as described in RFC 2119.*
