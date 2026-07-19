@@ -203,6 +203,16 @@ def shell(doc: dict, body: str) -> str:
 <link rel="canonical" href="{doc["canonical"]}">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📡</text></svg>">
 <link rel="alternate" type="text/markdown" href="{doc["md_alt"]}" title="Raw Markdown">
+<meta property="og:type" content="article">
+<meta property="og:title" content="{html.escape(doc["title"])}">
+<meta property="og:description" content="{html.escape(doc["description"])}">
+<meta property="og:url" content="{doc["canonical"]}">
+<meta property="og:image" content="https://smlweb.org/og.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="444">
+<meta property="og:image:alt" content="s—ml">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://smlweb.org/og.png">
 <meta name="theme-color" content="#ffffff">
 <style>
 :root{{
