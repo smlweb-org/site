@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>S—ML Web — Responsive Delivery Profiles for the Open Web</title>
+<title>S—ML Web : Responsive Delivery Profiles for the Open Web</title>
 <meta name="description" content="S—ML Web is a delivery-profile standard: one URL serves Sparse, Medium, and Luxe representations of the same content, negotiated by network, device, and agent needs.">
 <link rel="canonical" href="https://smlweb.org/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📡</text></svg>">
 <link rel="alternate" type="text/html" data-profile="s" href="https://smlweb.org/?profile=s">
 <link rel="alternate" type="text/markdown" href="https://github.com/smlweb-org/spec/blob/main/spec.md" title="S—ML Web Profile 0.4 (raw Markdown)">
 <meta property="og:type" content="website">
@@ -56,6 +57,19 @@ body{
   margin:0; background:var(--bg); color:var(--fg);
   font-family:ui-monospace,"IBM Plex Mono",Menlo,Consolas,"Liberation Mono",monospace;
   font-size:14px; line-height:1.65;
+}
+/* Decorative ambient blurs — pure CSS, no requests, wider than <main>, adapt to theme via --fg. */
+body::before,body::after{
+  content:""; position:fixed; z-index:-1; pointer-events:none; border-radius:50%;
+  filter:blur(90px);
+}
+body::before{
+  width:120vw; height:120vw; max-width:1500px; max-height:1500px; top:-40vh; left:-33vw;
+  background:radial-gradient(circle,color-mix(in srgb,var(--fg) 15%,transparent),transparent 65%);
+}
+body::after{
+  width:105vw; height:105vw; max-width:1350px; max-height:1350px; bottom:-34vh; right:-30vw;
+  background:radial-gradient(circle,color-mix(in srgb,var(--fg) 14%,transparent),transparent 68%);
 }
 main,header.site,footer.site{max-width:42rem; margin:0 auto; padding:0 1.25rem}
 a{color:var(--fg); text-underline-offset:3px}
